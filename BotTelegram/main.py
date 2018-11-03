@@ -25,4 +25,4 @@ def message_back(message):
         user_keyboard_back.row('My card', 'News')
         user_keyboard_back.row('Cafes', 'Menu')
         bot.send_message(message.from_user.id, "Aloha, doggy", reply_markup=user_keyboard_back)
-bot.polling(none_stop=True)
+bot.polling(none_stop=True) 
