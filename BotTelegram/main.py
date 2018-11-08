@@ -7,17 +7,16 @@ A = ['55.822134,37.384924', '55.771663,37.682658', '55.761076,37.632374', '55.75
              '55.754033,37.637354', '55.752040,37.670716', '55.745017,37.684479', '55.752604,37.597523',
              '55.742325,37.609997', '55.721476,37.611827', '55.693549,37.557648',
      '55.688152,37.615642', '55.663194,37.481396']
-lat = ''
-lon = ''
+dic = {}
 ad = ''
 for i in range (len(A)-1):
     ad+=A[i]+'|'
 ad+=A[len(A)-1]
 
 
-def distance_calc(lat1,lon1,mode):
+def distance_calc(latlon,mode):
     global ad
-    a = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + lat1 + ',' + lon1 + '&destinations=' + ad + '&mode=' + mode + '&language=ru&key=AIzaSyCcswgpnbZPAP4j1m91NRc2fnBfPO__APM'
+    a = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + latlon + '&destinations=' + ad + '&mode=' + mode + '&language=ru&key=AIzaSyCcswgpnbZPAP4j1m91NRc2fnBfPO__APM'
     b = {}
     r = requests.get(a, params=b)
     data = r.json()
@@ -74,7 +73,7 @@ def press_mycard(message):
             hide_markup.row('Ближайшая кофейня', 'Посмотреть все адреса')
             bot.send_message(message.from_user.id, 'Поиск ближайшей кофейни с учётом пробок...', reply_markup = hide_markup)
             s = 'driving&departure_time=now'
-            if lat=='':
+            if dic.get(message.from_user.id)==None:
                 keyboard = types.ReplyKeyboardMarkup(True)
                 button_geo = types.KeyboardButton(text='Отправить местоположение', request_location=True)
                 keyboard.add(button_geo)
@@ -86,15 +85,15 @@ def press_mycard(message):
             hide_markup.row('Ближайшая кофейня', 'Посмотреть все адреса')
             s = 'walking'
             bot.send_message(message.from_user.id, 'Поиск ближайшей кофейни...', reply_markup = hide_markup)
-            if lat=='':
+            if dic.get(message.from_user.id)==None:
                 keyboard = types.ReplyKeyboardMarkup(True)
                 button_geo = types.KeyboardButton(text='Отправить местоположение', request_location=True)
                 keyboard.add(button_geo)
                 bot.send_message(message.from_user.id, 'Произошла ошибка')
                 bot.send_message(message.from_user.id, 'Пожалуйста отправьте свои координаты', reply_markup=keyboard)
 
-        if lat!='':
-            distance, time, address, ind = distance_calc(lat, lon , s)
+        if dic.get(message.from_user.id)!=None:
+            distance, time, address, ind = distance_calc(dic[message.from_user.id], s)
             if distance != '':
 
                 st = A[ind].split(',')
@@ -102,8 +101,10 @@ def press_mycard(message):
                 bot.send_message(message.from_user.id,'Адрес ближайшего SurfCoffee: %s.' %address)
                 bot.send_message(message.from_user.id, 'Ваше расстояние до ближайшего SurfCoffee: %s м.' %distance)
                 bot.send_message(message.from_user.id, 'Время в пути до ближайшего SurfCoffee: %s' %time )
+                del dic[message.from_user.id]
             else:
                 bot.send_message(message.from_user.id, 'Невозможно проложить маршрут!')
+                del dic[message.from_user.id]
 
 @bot.message_handler(content_types=["location"])
 def location(message):
@@ -112,10 +113,6 @@ def location(message):
         hide_markup.row('На машине', 'Пешком')
         bot.send_message(message.from_user.id, 'Спасибо!', reply_markup=hide_markup)
         bot.send_message(message.from_user.id, 'Как ты будешь добираться до SurfCoffee?')
-        global lat, lon
-        lat = str(message.location.latitude)
-        lon = str(message.location.longitude)
-
-
+        dic[message.from_user.id] = str(message.location.latitude) + ',' + str(message.location.longitude)
 
 bot.polling(none_stop=True)
