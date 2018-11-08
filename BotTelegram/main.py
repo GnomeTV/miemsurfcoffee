@@ -72,7 +72,7 @@ def press_mycard(message):
             hide_markup = types.ReplyKeyboardMarkup(True)
             hide_markup.row('Ближайшая кофейня', 'Посмотреть все адреса')
             bot.send_message(message.from_user.id, 'Поиск ближайшей кофейни с учётом пробок...', reply_markup = hide_markup)
-            s = 'driving&departure_time=now'
+            dic[str(message.from_user.id)] = 'driving&departure_time=now'
             if dic.get(message.from_user.id)==None:
                 keyboard = types.ReplyKeyboardMarkup(True)
                 button_geo = types.KeyboardButton(text='Отправить местоположение', request_location=True)
@@ -83,7 +83,7 @@ def press_mycard(message):
         elif message.text == 'Пешком':
             hide_markup = types.ReplyKeyboardMarkup(True)
             hide_markup.row('Ближайшая кофейня', 'Посмотреть все адреса')
-            s = 'walking'
+            dic[str(message.from_user.id)] = 'walking'
             bot.send_message(message.from_user.id, 'Поиск ближайшей кофейни...', reply_markup = hide_markup)
             if dic.get(message.from_user.id)==None:
                 keyboard = types.ReplyKeyboardMarkup(True)
@@ -93,7 +93,7 @@ def press_mycard(message):
                 bot.send_message(message.from_user.id, 'Пожалуйста отправьте свои координаты', reply_markup=keyboard)
 
         if dic.get(message.from_user.id)!=None:
-            distance, time, address, ind = distance_calc(dic[message.from_user.id], s)
+            distance, time, address, ind = distance_calc(dic[message.from_user.id], dic[str(message.from_user.id)])
             if distance != '':
 
                 st = A[ind].split(',')
@@ -102,9 +102,11 @@ def press_mycard(message):
                 bot.send_message(message.from_user.id, 'Ваше расстояние до ближайшего SurfCoffee: %s м.' %distance)
                 bot.send_message(message.from_user.id, 'Время в пути до ближайшего SurfCoffee: %s' %time )
                 del dic[message.from_user.id]
+                del dic[str(message.from_user.id)]
             else:
                 bot.send_message(message.from_user.id, 'Невозможно проложить маршрут!')
                 del dic[message.from_user.id]
+                del dic[str(message.from_user.id)]
 
 @bot.message_handler(content_types=["location"])
 def location(message):
