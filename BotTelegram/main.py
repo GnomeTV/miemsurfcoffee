@@ -5,6 +5,8 @@ import requests
 from PIL import Image
 from pyzbar.pyzbar import decode
 bot = telebot.TeleBot(const.token)
+import os
+
 
 menu = ('''{:-^30}
 {:.^} - {}
@@ -232,7 +234,7 @@ def handle_docs_photo(message):
     fileName = str(str(message.chat.id) + '.jpg')
     file_info = bot.get_file(message.photo[len(message.photo) - 1].file_id)
     downloaded_file = bot.download_file(file_info.file_path)
-    src = 'C:/Users/User/PycharmProjects/location/' + fileName
+    src = '/Users/Ivan/Desktop/GitHub/miemsurfcoffee/telegramBot/' + fileName
     with open(src, 'wb') as new_file:
             new_file.write(downloaded_file)
     bot.reply_to(message, "QRcode обрабатывается")
@@ -242,5 +244,6 @@ def handle_docs_photo(message):
         bot.send_message(message.from_user.id, '%s' %cardNum)
     except Exception:
         bot.send_message(message.from_user.id, 'Произошла ошибка. Отправь фотографию еще раз!')
+    os.remove(src)
 
 bot.polling(none_stop=True)
