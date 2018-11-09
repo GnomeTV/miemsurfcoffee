@@ -155,32 +155,20 @@ def press_mycard(message):
         user_keyboard_back.row('Кофейни', 'Меню')
         bot.send_message(message.from_user.id, '%s' %menu, reply_markup=user_keyboard_back)
 # Моя карта
-    fileName = str(str(message.chat.id) + '.jpg')
     if message.text == 'Моя карта':
-        mycard_keyboard = telebot.types.ReplyKeyboardMarkup()
+        mycard_keyboard = telebot.types.ReplyKeyboardMarkup(True)
         mycard_keyboard.row('Узнать баланс', 'Назад')
         bot.send_message(message.from_user.id, "Выберите", reply_markup=mycard_keyboard)
     if message.text == 'Узнать баланс':
         bot.send_message(message.from_user.id, "Отправь фотку QR кода с обратной стороны карты")
-        @bot.message_handler(content_types=['photo'])
-        def handle_docs_photo(message):
-            file_info = bot.get_file(message.photo[len(message.photo) - 1].file_id)
-            downloaded_file = bot.download_file(file_info.file_path)
-            src = '/Users/Ivan/Desktop/GitHub/miemsurfcoffee/telegramBot/' + fileName
-            with open(src, 'wb') as new_file:
-                new_file.write(downloaded_file)
-            bot.reply_to(message, "QRcode обрабатывается")
-            qr_code = decode(Image.open(fileName))
-            cardNum = str(qr_code).split()[0][16:-2]
-            bot.send_message(message.from_user.id, cardNum)
     if message.text == 'Назад':
         user_keyboard_back = telebot.types.ReplyKeyboardMarkup()
         user_keyboard_back.row('Моя карта', 'Новости')
         user_keyboard_back.row('Кофейни', 'Меню')
         bot.send_message(message.from_user.id, "Выберите", reply_markup=user_keyboard_back)
     if message.text == 'Кофейни':
-        user_keyboard = telebot.types.ReplyKeyboardMarkup()
-        user_keyboard.row('Ближайшая кофейня', 'Посмотреть все адреса')
+        user_keyboard = telebot.types.ReplyKeyboardMarkup(True)
+        user_keyboard.row('Ближайшая кофейня', 'Посмотреть все адреса', 'Назад')
         bot.send_message(message.from_user.id, "Выберите", reply_markup=user_keyboard)
     if message.text == 'Ближайшая кофейня':
         keyboard = types.ReplyKeyboardMarkup(True)
@@ -193,7 +181,7 @@ def press_mycard(message):
     else:
         if message.text == 'На машине':
             hide_markup = types.ReplyKeyboardMarkup(True)
-            hide_markup.row('Ближайшая кофейня', 'Посмотреть все адреса')
+            hide_markup.row('Ближайшая кофейня', 'Посмотреть все адреса', 'Назад')
             bot.send_message(message.from_user.id, 'Поиск ближайшей кофейни с учётом пробок...', reply_markup = hide_markup)
             dic[str(message.from_user.id)] = 'driving&departure_time=now'
             if dic.get(message.from_user.id)==None:
@@ -205,7 +193,7 @@ def press_mycard(message):
 
         elif message.text == 'Пешком':
             hide_markup = types.ReplyKeyboardMarkup(True)
-            hide_markup.row('Ближайшая кофейня', 'Посмотреть все адреса')
+            hide_markup.row('Ближайшая кофейня', 'Посмотреть все адреса', 'Назад')
             dic[str(message.from_user.id)] = 'walking'
             bot.send_message(message.from_user.id, 'Поиск ближайшей кофейни...', reply_markup = hide_markup)
             if dic.get(message.from_user.id)==None:
@@ -239,5 +227,20 @@ def location(message):
         bot.send_message(message.from_user.id, 'Спасибо!', reply_markup=hide_markup)
         bot.send_message(message.from_user.id, 'Как ты будешь добираться до SurfCoffee?')
         dic[message.from_user.id] = str(message.location.latitude) + ',' + str(message.location.longitude)
+@bot.message_handler(content_types=['photo'])
+def handle_docs_photo(message):
+    fileName = str(str(message.chat.id) + '.jpg')
+    file_info = bot.get_file(message.photo[len(message.photo) - 1].file_id)
+    downloaded_file = bot.download_file(file_info.file_path)
+    src = 'C:/Users/User/PycharmProjects/location/' + fileName
+    with open(src, 'wb') as new_file:
+            new_file.write(downloaded_file)
+    bot.reply_to(message, "QRcode обрабатывается")
+    try:
+        qr_code = decode(Image.open(fileName))
+        cardNum = str(qr_code).split()[0][16:-2]
+        bot.send_message(message.from_user.id, '%s' %cardNum)
+    except Exception:
+        bot.send_message(message.from_user.id, 'Произошла ошибка. Отправь фотографию еще раз!')
 
 bot.polling(none_stop=True)
