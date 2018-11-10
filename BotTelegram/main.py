@@ -8,105 +8,6 @@ bot = telebot.TeleBot(const.token)
 import os
 
 
-menu = ('''{:-^30}
-{:.^} - {}
-{:.^} - {}
-{:.^} - {}
-{:.^} - {}
-{:.^} - {}
-{:-^30}
-{:.^} - {}
-{:.^} - {}
-{:.^} - {}
-{:.^} - {}
-{:-^30}
-{:.^} - {}
-{:.^} - {}
-{:.^} - {}
-{:-^30}
-{:.^} - {}
-{:.^} - {}
-{:.^} - {}
-{:.^} - {}
-{:.^} - {}
-{:-^30}
-{:.^} - {}
-{:.^} - {}
-{:.^} - {}
-{:.^} - {}
-{:.^} - {}
-{:-^30}
-{:.^} - {}
-{:.^} - {}
-{:-^30}
-{:.^} - {}
-{:.^} - {}
-{:.^} - {}
-{:-^30}
-{:.^} - {}
-{:.^} - {}
-{:.^} - {}
-{:-^30}
-{:.^} - {}
-{:.^} - {}
-{:-^30}
-{:.^} - {}
-{:.^} - {}
-{:.^} - {}
-{:.^} - {}
-{:.^} - {}
-{:.^} - {}
-{:-^30}
-{:.^} - {}
-{:-^30}
-{:.^} - {}
-{:.^} - {}
-'''.format('Фирменный Кофе', 'Двойной гавайский', '229/249 ₽', 'Малиновый латте', '229/249 ₽', 'Джинджер', '229/249 ₽', 'Латте теахупу', '229/249 ₽', 'Хайфа кофе', '229/249 ₽', 'Раф-Кофе',
-'Классический', '249/279 ₽', 'Пуэрто-риканский', '269/299 ₽',
-'Солёная карамель', '249/279 ₽',
-'Лавандовый', '269/299 ₽',
-'Шоколад',
-'Мокко', '219/249 ₽',
-'Мятный мокко', '249/279 ₽',
-'Какао', '169/189/219 ₽',
-'Фирменные Чаи',
-'Биарритц', '179/209 ₽',
-'Чилин', '179/209 ₽',
-'Карелия', '179/209 ₽',
-'Пряный чай-латте', '179/209 ₽',
-'Иван-чай', '69/99 ₽',
-'Go Vegan!',
-'Ко вай веган', '229/269/329 ₽',
-'Матча латте', '229/269/329 ₽',
-'Чёрный латте', '219/249/269 ₽',
-'Битберри латте', '229/269/329 ₽',
-'Айс манки смузи', '199 ₽',
-'Холодный Кофе',
-'Айс-латте', '199 ₽',
-'Маверик бамбл', '219 ₽',
-'Смузи',
-'Португальский', '259 ₽',
-'Утро на Таити', '259 ₽',
-'Бали бум', '259 ₽',
-'Лимонады',
-'Кейптаун', '199 ₽',
-'Кэлли слейтер', '199 ₽',
-'Сан-паулу', '199 ₽',
-'Милкшейки',
-'Ванильный', '259 ₽',
-'Орео', '259 ₽',
-'Классика Кофе',
-'Эспрессо', '99 ₽',
-'Американо', '139/169/199 ₽',
-'Фильтр-кофе', '139/169/199 ₽',
-'Капучино', '149/179/199 ₽',
-'Латте', '149/179/199 ₽',
-'Флет уайт', '169 ₽',
-'Молоко',
-'Альтернативное', '50/80/110 ₽',
-'Добавки',
-'Сироп SURF', '10/20/30 ₽',
-'Зефир маршмеллоу / масала ', '50/80 ₽'))
 
 A = ['55.822134,37.384924', '55.771663,37.682658', '55.761076,37.632374', '55.757391,37.622978',
              '55.754033,37.637354', '55.752040,37.670716', '55.745017,37.684479', '55.752604,37.597523',
@@ -151,11 +52,14 @@ def handler_start(message):
 # Клавиатура для кнопки (Моя карта)
 @bot.message_handler(content_types=['text'])
 def press_mycard(message):
+# Меню
     if message.text == 'Меню':
         user_keyboard_back = telebot.types.ReplyKeyboardMarkup()
         user_keyboard_back.row('Моя карта', 'Новости')
         user_keyboard_back.row('Кофейни', 'Меню')
-        bot.send_message(message.from_user.id, '%s' %menu, reply_markup=user_keyboard_back)
+        bot.send_message(message.from_user.id, '%s' %const.menu, reply_markup=user_keyboard_back)
+    if message.text == "Новости":
+        bot.send_message(message.from_user.id, "Находится в разработке...")
 # Моя карта
     if message.text == 'Моя карта':
         mycard_keyboard = telebot.types.ReplyKeyboardMarkup(True)
@@ -163,11 +67,13 @@ def press_mycard(message):
         bot.send_message(message.from_user.id, "Выберите", reply_markup=mycard_keyboard)
     if message.text == 'Узнать баланс':
         bot.send_message(message.from_user.id, "Отправь фотку QR кода с обратной стороны карты")
+# Назад
     if message.text == 'Назад':
         user_keyboard_back = telebot.types.ReplyKeyboardMarkup()
         user_keyboard_back.row('Моя карта', 'Новости')
         user_keyboard_back.row('Кофейни', 'Меню')
         bot.send_message(message.from_user.id, "Выберите", reply_markup=user_keyboard_back)
+# Кофейни
     if message.text == 'Кофейни':
         user_keyboard = telebot.types.ReplyKeyboardMarkup(True)
         user_keyboard.row('Ближайшая кофейня', 'Посмотреть все адреса', 'Назад')
@@ -179,7 +85,6 @@ def press_mycard(message):
         bot.send_message(message.from_user.id, 'Отправь мне своё местоположение!', reply_markup=keyboard)
     elif message.text == 'Посмотреть все адреса':
         bot.send_message(message.from_user.id, 'Перейдите по ссылке: https://www.google.com/maps/d/u/0/edit?mid=1uy5NOjQzmv_o0YjL0s17279nTRe35_42&ll=55.773651838993%2C37.51691856768127&z=11')
-
     else:
         if message.text == 'На машине':
             hide_markup = types.ReplyKeyboardMarkup(True)
@@ -244,6 +149,6 @@ def handle_docs_photo(message):
         bot.send_message(message.from_user.id, '%s' %cardNum)
     except Exception:
         bot.send_message(message.from_user.id, 'Произошла ошибка. Отправь фотографию еще раз!')
-    os.remove(src)
+   # os.remove(src)
 
 bot.polling(none_stop=True)
