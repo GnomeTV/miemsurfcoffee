@@ -4,8 +4,10 @@ from telebot import types
 import requests
 from PIL import Image
 from pyzbar.pyzbar import decode
-bot = telebot.TeleBot(const.token)
+import httplib2
 import os
+from time import ctime
+bot = telebot.TeleBot(const.token)
 
 
 
@@ -59,7 +61,70 @@ def press_mycard(message):
         user_keyboard_back.row('Кофейни', 'Меню')
         bot.send_message(message.from_user.id, '%s' %const.menu, reply_markup=user_keyboard_back)
     if message.text == "Новости":
-        bot.send_message(message.from_user.id, "Находится в разработке...")
+        bot.send_message(message.from_user.id, "Три последнии новости!")
+        URL_VK = 'https://api.vk.com/method/wall.get?domain=surfcoffee&count=10&v=5.74&filter=owner&access_token=012c6a2d9bad7caebbe3e95a23a23e8f0dca7abe2b3d1bcc2b893d590f223af1a1e928d87583a96713200'
+        w = {}
+        l = requests.get(URL_VK, params=w)
+        data2 = l.json()
+        try:
+            if data2['response']['items'][1]['text'] == '':
+                bot.send_message(message.from_user.id, '1) https://vk.com/surfcoffee?w=wall-464371_' + str(data2['response']['items'][1]['id']))
+            else:
+                bot.send_message(message.from_user.id, '1)' + data2['response']['items'][1]['text'])
+        except Exception:
+                print()
+        try:
+            s='/Users/Ivan/Desktop/GitHub/miemsurfcoffee/telegramBot/' + const.timeCorrect + '.jpg'
+            url = str(data2['response']['items'][1]['attachments'][0]['photo']['photo_604'])
+            h = httplib2.Http('.cache')
+            response, content = h.request(url)
+            out = open(s, 'wb')
+            out.write(content)
+            out.close()
+            img = open(s, 'rb')
+            bot.send_photo(message.from_user.id, img)
+        except Exception:
+            print()
+        try:
+            if data2['response']['items'][2]['text'] == '':
+                bot.send_message(message.from_user.id, '2) https://vk.com/surfcoffee?w=wall-464371_' + str(data2['response']['items'][2]['id']))
+            else:
+                bot.send_message(message.from_user.id, '2)' + data2['response']['items'][2]['text'])
+        except Exception:
+            print()
+        try:
+            s='/Users/Ivan/Desktop/GitHub/miemsurfcoffee/telegramBot/' + const.timeCorrect + '.jpg'
+            url = str(data2['response']['items'][2]['attachments'][0]['photo']['photo_604'])
+            h = httplib2.Http('.cache')
+            response, content = h.request(url)
+            out = open(s, 'wb')
+            out.write(content)
+            out.close()
+            img = open(s, 'rb')
+            bot.send_photo(message.from_user.id, img)
+        except Exception:
+            print()
+        try:
+            if data2['response']['items'][3]['text'] == '':
+                bot.send_message(message.from_user.id, '3) https://vk.com/surfcoffee?w=wall-464371_' + str(data2['response']['items'][3]['id']))
+            else:
+                bot.send_message(message.from_user.id, '3)' + data2['response']['items'][3]['text'])
+        except Exception:
+            print()
+        try:
+            s='/Users/Ivan/Desktop/GitHub/miemsurfcoffee/telegramBot/' + const.timeCorrect + '.jpg'
+            url = str(data2['response']['items'][3]['attachments'][0]['photo']['photo_604'])
+            h = httplib2.Http('.cache')
+            response, content = h.request(url)
+            out = open(s, 'wb')
+            out.write(content)
+            out.close()
+            img = open(s, 'rb')
+            bot.send_photo(message.from_user.id, img)
+        except Exception:
+            print()
+        img.close()
+        os.unlink(s)
 # Моя карта
     if message.text == 'Моя карта':
         mycard_keyboard = telebot.types.ReplyKeyboardMarkup(True)
@@ -125,7 +190,7 @@ def press_mycard(message):
                 bot.send_message(message.from_user.id, 'Невозможно проложить маршрут!')
                 del dic[message.from_user.id]
                 del dic[str(message.from_user.id)]
-
+# Кофейни
 @bot.message_handler(content_types=["location"])
 def location(message):
     if message.location is not None:
@@ -134,6 +199,7 @@ def location(message):
         bot.send_message(message.from_user.id, 'Спасибо!', reply_markup=hide_markup)
         bot.send_message(message.from_user.id, 'Как ты будешь добираться до SurfCoffee?')
         dic[message.from_user.id] = str(message.location.latitude) + ',' + str(message.location.longitude)
+# Фото
 @bot.message_handler(content_types=['photo'])
 def handle_docs_photo(message):
     fileName = str(str(message.chat.id) + '.jpg')
@@ -149,6 +215,5 @@ def handle_docs_photo(message):
         bot.send_message(message.from_user.id, '%s' %cardNum)
     except Exception:
         bot.send_message(message.from_user.id, 'Произошла ошибка. Отправь фотографию еще раз!')
-   # os.remove(src)
 
 bot.polling(none_stop=True)
