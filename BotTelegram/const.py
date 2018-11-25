@@ -1,4 +1,6 @@
-
+from datetime import datetime
+timeNow = str(datetime.now())
+timeCorrect = timeNow[11] + timeNow[12] + timeNow[14] + timeNow[15]
 token = "723451562:AAEupahKBEuUPhglLnMiTOb8g3RkaTC2pNs"
 menu = ('''{:-^30}
 
