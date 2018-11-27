@@ -4,9 +4,6 @@ from telebot import types
 import requests
 from PIL import Image
 from pyzbar.pyzbar import decode
-import httplib2
-import os
-from time import ctime
 bot = telebot.TeleBot(const.token)
 
 
@@ -72,17 +69,10 @@ def press_mycard(message):
             else:
                 bot.send_message(message.from_user.id, '1)' + data2['response']['items'][1]['text'])
         except Exception:
-                print()
+            print()
         try:
-            s='/Users/Ivan/Desktop/GitHub/miemsurfcoffee/telegramBot/' + const.timeCorrect + '.jpg'
-            url = str(data2['response']['items'][1]['attachments'][0]['photo']['photo_604'])
-            h = httplib2.Http('.cache')
-            response, content = h.request(url)
-            out = open(s, 'wb')
-            out.write(content)
-            out.close()
-            img = open(s, 'rb')
-            bot.send_photo(message.from_user.id, img)
+            s1 = 'C:/Users/Ivan/PycharmProjects/location/news1.jpg'
+            bot.send_photo(message.from_user.id, open(s1, 'rb'))
         except Exception:
             print()
         try:
@@ -93,15 +83,8 @@ def press_mycard(message):
         except Exception:
             print()
         try:
-            s='/Users/Ivan/Desktop/GitHub/miemsurfcoffee/telegramBot/' + const.timeCorrect + '.jpg'
-            url = str(data2['response']['items'][2]['attachments'][0]['photo']['photo_604'])
-            h = httplib2.Http('.cache')
-            response, content = h.request(url)
-            out = open(s, 'wb')
-            out.write(content)
-            out.close()
-            img = open(s, 'rb')
-            bot.send_photo(message.from_user.id, img)
+            s2 = 'C:/Users/Ivan/PycharmProjects/location/news2.jpg'
+            bot.send_photo(message.from_user.id, open(s2, 'rb'))
         except Exception:
             print()
         try:
@@ -112,19 +95,10 @@ def press_mycard(message):
         except Exception:
             print()
         try:
-            s='/Users/Ivan/Desktop/GitHub/miemsurfcoffee/telegramBot/' + const.timeCorrect + '.jpg'
-            url = str(data2['response']['items'][3]['attachments'][0]['photo']['photo_604'])
-            h = httplib2.Http('.cache')
-            response, content = h.request(url)
-            out = open(s, 'wb')
-            out.write(content)
-            out.close()
-            img = open(s, 'rb')
-            bot.send_photo(message.from_user.id, img)
+            s3 = 'C:/Users/Ivan/PycharmProjects/location/news3.jpg'
+            bot.send_photo(message.from_user.id, open(s3, 'rb'))
         except Exception:
             print()
-        img.close()
-        os.unlink(s)
 # Моя карта
     if message.text == 'Моя карта':
         mycard_keyboard = telebot.types.ReplyKeyboardMarkup(True)
@@ -205,7 +179,7 @@ def handle_docs_photo(message):
     fileName = str(str(message.chat.id) + '.jpg')
     file_info = bot.get_file(message.photo[len(message.photo) - 1].file_id)
     downloaded_file = bot.download_file(file_info.file_path)
-    src = '/Users/Ivan/Desktop/GitHub/miemsurfcoffee/telegramBot/' + fileName
+    src = 'C:/Users/Ivan/PycharmProjects/location/' + fileName
     with open(src, 'wb') as new_file:
             new_file.write(downloaded_file)
     bot.reply_to(message, "QRcode обрабатывается")
