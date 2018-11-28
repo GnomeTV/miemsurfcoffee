@@ -110,6 +110,11 @@ def press_mycard(message):
             bot.send_message(message.from_user.id, "Отправь фотку QR кода с обратной стороны карты")
     # Назад
         elif message.text == 'Назад':
+            try:
+                del dic[message.from_user.id]
+                del dic[str(message.from_user.id)]
+            except Exception:
+                print()
             user_keyboard_back = telebot.types.ReplyKeyboardMarkup()
             user_keyboard_back.row('Моя карта', 'Новости')
             user_keyboard_back.row('Кофейни', 'Меню')
@@ -151,8 +156,12 @@ def press_mycard(message):
                     bot.send_message(message.from_user.id, 'Произошла ошибка')
                     bot.send_message(message.from_user.id, 'Пожалуйста отправьте свои координаты', reply_markup=keyboard)
 
+            a=None
             if dic.get(message.from_user.id)!=None:
-                distance, time, address, ind = distance_calc(dic[message.from_user.id], dic[str(message.from_user.id)])
+                a = dic[message.from_user.id]
+                del dic[message.from_user.id]
+            if a!=None:
+                distance, time, address, ind = distance_calc(a, dic[str(message.from_user.id)])
                 if distance != '':
 
                     st = A[ind].split(',')
@@ -160,11 +169,9 @@ def press_mycard(message):
                     bot.send_message(message.from_user.id,'Адрес ближайшего SurfCoffee: %s.' %address)
                     bot.send_message(message.from_user.id, 'Ваше расстояние до ближайшего SurfCoffee: %s м.' %distance)
                     bot.send_message(message.from_user.id, 'Время в пути до ближайшего SurfCoffee: %s' %time )
-                    del dic[message.from_user.id]
                     del dic[str(message.from_user.id)]
                 else:
                     bot.send_message(message.from_user.id, 'Невозможно проложить маршрут!')
-                    del dic[message.from_user.id]
                     del dic[str(message.from_user.id)]
     except Exception:
         bot.send_message(message.from_user.id, 'Зря ты так много запросов отправлял ☠')
