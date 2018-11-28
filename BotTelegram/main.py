@@ -70,11 +70,12 @@ def press_mycard(message):
                 bot.send_message(message.from_user.id, '1)' + data2['response']['items'][1]['text'])
         except Exception:
             print()
-        try:
-            s1 = 'C:/Users/Ivan/PycharmProjects/location/news1.jpg'
-            bot.send_photo(message.from_user.id, open(s1, 'rb'))
-        except Exception:
-            print()
+        for i in range(10):
+            try:
+                s1 = 'C:/Users/User/PycharmProjects/location/news1.'+ str(i) +'.jpg'
+                bot.send_photo(message.from_user.id, open(s1, 'rb'))
+            except Exception:
+                print()
         try:
             if data2['response']['items'][2]['text'] == '':
                 bot.send_message(message.from_user.id, '2) https://vk.com/surfcoffee?w=wall-464371_' + str(data2['response']['items'][2]['id']))
@@ -82,11 +83,12 @@ def press_mycard(message):
                 bot.send_message(message.from_user.id, '2)' + data2['response']['items'][2]['text'])
         except Exception:
             print()
-        try:
-            s2 = 'C:/Users/Ivan/PycharmProjects/location/news2.jpg'
-            bot.send_photo(message.from_user.id, open(s2, 'rb'))
-        except Exception:
-            print()
+        for i in range(10):
+            try:
+                s2 = 'C:/Users/User/PycharmProjects/location/news2.'+ str(i) +'.jpg'
+                bot.send_photo(message.from_user.id, open(s2, 'rb'))
+            except Exception:
+                print()
         try:
             if data2['response']['items'][3]['text'] == '':
                 bot.send_message(message.from_user.id, '3) https://vk.com/surfcoffee?w=wall-464371_' + str(data2['response']['items'][3]['id']))
@@ -94,11 +96,12 @@ def press_mycard(message):
                 bot.send_message(message.from_user.id, '3)' + data2['response']['items'][3]['text'])
         except Exception:
             print()
-        try:
-            s3 = 'C:/Users/Ivan/PycharmProjects/location/news3.jpg'
-            bot.send_photo(message.from_user.id, open(s3, 'rb'))
-        except Exception:
-            print()
+        for i in range (10):
+            try:
+                s3 = 'C:/Users/User/PycharmProjects/location/news3.'+ str(i) +'.jpg'
+                bot.send_photo(message.from_user.id, open(s3, 'rb'))
+            except Exception:
+                print()
 # Моя карта
     if message.text == 'Моя карта':
         mycard_keyboard = telebot.types.ReplyKeyboardMarkup(True)

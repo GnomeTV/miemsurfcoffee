@@ -7,38 +7,38 @@ while True:
     w = {}
     l = requests.get(URL_VK, params=w)
     data2 = l.json()
+    for i in range(10):
+        try:
+            s1 = 'C:/Users/User/PycharmProjects/location/news1.'+ str(i) +'.jpg'
+            url = str(data2['response']['items'][1]['attachments'][i]['photo']['photo_604'])
+            h = httplib2.Http('.cache')
+            response, content = h.request(url)
+            out = open(s1, 'wb')
+            out.write(content)
+            out.close()
+        except Exception:
+            print()
 
-    try:
-        s1 = 'C:/Users/Ivan/PycharmProjects/location/news1.jpg'
-        url = str(data2['response']['items'][1]['attachments'][0]['photo']['photo_604'])
-        h = httplib2.Http('.cache')
-        response, content = h.request(url)
-        out = open(s1, 'wb')
-        out.write(content)
-        out.close()
-    except Exception:
-        print()
+        try:
+            s2='C:/Users/User/PycharmProjects/location/news2.'+ str(i) +'.jpg'
+            url = str(data2['response']['items'][2]['attachments'][i]['photo']['photo_604'])
+            h = httplib2.Http('.cache')
+            response, content = h.request(url)
+            out = open(s2, 'wb')
+            out.write(content)
+            out.close()
+        except Exception:
+            print()
 
-    try:
-        s2='C:/Users/Ivan/PycharmProjects/location/news2.jpg'
-        url = str(data2['response']['items'][2]['attachments'][0]['photo']['photo_604'])
-        h = httplib2.Http('.cache')
-        response, content = h.request(url)
-        out = open(s2, 'wb')
-        out.write(content)
-        out.close()
-    except Exception:
-        print()
-
-    try:
-        s3 = 'C:/Users/Ivan/PycharmProjects/location/news3.jpg'
-        url = str(data2['response']['items'][3]['attachments'][0]['photo']['photo_604'])
-        h = httplib2.Http('.cache')
-        response, content = h.request(url)
-        out = open(s3, 'wb')
-        out.write(content)
-        out.close()
-    except Exception:
-        print()
+        try:
+            s3 = 'C:/Users/User/PycharmProjects/location/news3.'+ str(i) +'.jpg'
+            url = str(data2['response']['items'][3]['attachments'][i]['photo']['photo_604'])
+            h = httplib2.Http('.cache')
+            response, content = h.request(url)
+            out = open(s3, 'wb')
+            out.write(content)
+            out.close()
+        except Exception:
+            print()
 
     time.sleep(3600)
