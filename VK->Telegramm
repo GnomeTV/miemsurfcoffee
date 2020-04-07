@@ -11,7 +11,7 @@ URL_VK = 'https://api.vk.com/method/wall.get?domain=posts&count=10&filter=owner&
 FILENAME_VK = 'last_known_id.txt'
 BASE_POST_URL = 'https://vk.com/wall-39270586_'
 
-BOT_TOKEN = '767819015:AAE5spux1LdG-Y0PZkqj0xOFEPJbt-MuRLEл'
+BOT_TOKEN = 'TOKEN'
 CHANNEL_NAME = '@SurfC_Bot'
 
 bot = telebot.TeleBot(BOT_TOKEN)
